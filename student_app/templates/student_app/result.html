@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>✨ Votre résultat GPA</title>
+
+    <!-- Police Google : Satoshi ou fallback moderne -->
+    <link href="https://fonts.googleapis.com/css2?family=Satoshi:wght@400;500;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-gradient: linear-gradient(135deg, #f5f7ff 0%, #e0f2fe 50%, #fefce8 100%);
+            --card-bg: rgba(255, 255, 255, 0.75);
+            --card-border: rgba(255, 255, 255, 0.4);
+            --primary: #5b8ff4;
+            --success: #34d399;
+            --text: #1e293b;
+            --text-light: #64748b;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Satoshi', 'Segoe UI', sans-serif;
+            background: var(--bg-gradient);
+            background-attachment: fixed;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            color: var(--text);
+        }
+
+        .container {
+            width: 100%;
+            max-width: 480px;
+            text-align: center;
+        }
+
+        .card {
+            background: var(--card-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-radius: 24px;
+            border: 1px solid var(--card-border);
+            padding: 48px 32px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+            animation: floatIn 1s ease-out forwards;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        @keyframes floatIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h1 {
+            font-size: 2.8rem;
+            background: linear-gradient(90deg, #5b8ff4, #a78bfa);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 16px;
+            font-weight: 700;
+        }
+
+        .gpa {
+            font-size: 5rem;
+            font-weight: 700;
+            background: linear-gradient(90deg, #34d399, #10b981);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin: 24px 0;
+            line-height: 1;
+        }
+
+        .date {
+            color: var(--text-light);
+            font-size: 1.1rem;
+            margin-bottom: 40px;
+        }
+
+        .btn {
+            display: inline-block;
+            background: linear-gradient(90deg, #5b8ff4, #7c3aed);
+            color: white;
+            text-decoration: none;
+            padding: 14px 32px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 20px rgba(124, 58, 237, 0.3);
+        }
+
+        .btn:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 16px 32px rgba(124, 58, 237, 0.4);
+        }
+
+        .sparkles {
+            position: absolute;
+            font-size: 2rem;
+            pointer-events: none;
+            animation: sparkle 2s infinite;
+        }
+
+        .sparkle-1 { top: 15%; left: 10%; animation-delay: 0s; }
+        .sparkle-2 { top: 20%; right: 15%; animation-delay: 0.7s; }
+        .sparkle-3 { bottom: 25%; left: 12%; animation-delay: 1.4s; }
+
+        @keyframes sparkle {
+            0%, 100% { opacity: 0; transform: scale(0) rotate(0deg); }
+            50% { opacity: 1; transform: scale(1) rotate(180deg); }
+        }
+
+        footer {
+            margin-top: 60px;
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- Petites étincelles décoratives -->
+        <div class="sparkles sparkle-1">✨</div>
+        <div class="sparkles sparkle-2">✨</div>
+        <div class="sparkles sparkle-3">✨</div>
+
+        <div class="card">
+            <h1>Bravo !</h1>
+            <p>Votre prédiction GPA est arrivée</p>
+
+            <div class="gpa">{{ record.predicted_gpa|floatformat:2 }}</div>
+
+            <p class="date">Calculée le {{ record.created_at|date:"d F Y à H:i" }}</p>
+
+            <a href="{% url 'student_predict' %}" class="btn">
+                Nouvelle prédiction
+            </a>
+        </div>
+
+        <footer>
+            Prédiction réalisée avec ❤️ par ton super modèle IA
+        </footer>
+    </div>
+
+</body>
+</html>

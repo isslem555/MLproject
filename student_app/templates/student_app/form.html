@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8">
+    <title>Prédiction de Performance Étudiante</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #e0eafc 0%, #cfdef3 100%);
+            min-height: 100vh;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            max-width: 580px;
+            width: 100%;
+            padding: 40px 35px;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        h1 {
+            text-align: center;
+            color: #5e60ce;
+            margin-bottom: 10px;
+            font-weight: 600;
+            font-size: 28px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #8d99ae;
+            margin-bottom: 30px;
+            font-size: 16px;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+        }
+
+        label {
+            font-weight: 500;
+            color: #4a5568;
+            margin-bottom: 6px;
+            display: block;
+        }
+
+        input, select {
+            padding: 14px 16px;
+            font-size: 16px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            background-color: #fafafa;
+            transition: all 0.3s ease;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: #a29bfe;
+            background-color: #fff;
+            box-shadow: 0 0 0 4px rgba(162, 155, 254, 0.15);
+        }
+
+        button {
+            margin-top: 15px;
+            padding: 14px;
+            font-size: 17px;
+            font-weight: 600;
+            color: white;
+            background: linear-gradient(135deg, #6c5ce7 0%, #a29bfe 100%);
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 15px rgba(108, 92, 231, 0.3);
+        }
+
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 25px rgba(108, 92, 231, 0.4);
+        }
+
+        .result {
+            margin-top: 30px;
+            padding: 20px;
+            background: linear-gradient(135deg, #d5fefd 0%, #c3fce3 100%);
+            border-radius: 16px;
+            border-left: 5px solid #00d2d3;
+        }
+
+        .result h2 {
+            margin-top: 0;
+            color: #2d3436;
+        }
+
+        .result p {
+            margin: 10px 0;
+            font-size: 17px;
+            color: #2d3436;
+        }
+
+        a.back {
+            display: inline-block;
+            margin-top: 15px;
+            color: #6c5ce7;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        a.back:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>🌟 Prédiction de GPA</h1>
+    <p class="subtitle">Estimez la performance académique future de l'étudiant</p>
+
+    <form method="post" action="{% url 'student_form' %}">
+        {% csrf_token %}
+        {{ form.as_p }}
+
+        <button type="submit">🚀 Estimer le GPA</button>
+    </form>
+
+    {% if record %}
+    <div class="result">
+        <h2>🎉 Résultat de la prédiction</h2>
+        <p><strong>GPA prédit :</strong> <span style="font-size:22px; color:#0984e3;">{{ record.predicted_gpa }}</span></p>
+        <p><strong>Date :</strong> {{ record.created_at|date:"d/m/Y à H:i" }}</p>
+        <a href="{% url 'student_form' %}" class="back">← Faire une nouvelle prédiction</a>
+    </div>
+    {% endif %}
+</div>
+
+</body>
+</html>
