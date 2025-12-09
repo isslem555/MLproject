@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
     <meta charset="utf-8">
-    <title>Prédiction de Performance Étudiante</title>
+    <title>Prédiction Stress & GPA</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
@@ -57,7 +57,7 @@
             display: block;
         }
 
-        input, select {
+        input {
             padding: 14px 16px;
             font-size: 16px;
             border: 2px solid #e2e8f0;
@@ -66,7 +66,7 @@
             transition: all 0.3s ease;
         }
 
-        input:focus, select:focus {
+        input:focus {
             outline: none;
             border-color: #a29bfe;
             background-color: #fff;
@@ -125,27 +125,25 @@
     </style>
 </head>
 <body>
-
 <div class="container">
-    <h1>🌟 Prédiction de GPA</h1>
-    <p class="subtitle">Estimez la performance académique future de l'étudiant</p>
+    <h1>🌟 Prédiction Stress & GPA</h1>
+    <p class="subtitle">Estimez le stress et la performance académique de l'étudiant</p>
 
     <form method="post" action="{% url 'student_form' %}">
         {% csrf_token %}
         {{ form.as_p }}
-
-        <button type="submit">🚀 Estimer le GPA</button>
+        <button type="submit">🚀 Prédire</button>
     </form>
 
     {% if record %}
     <div class="result">
         <h2>🎉 Résultat de la prédiction</h2>
-        <p><strong>GPA prédit :</strong> <span style="font-size:22px; color:#0984e3;">{{ record.predicted_gpa }}</span></p>
+        <p><strong>Stress prédit :</strong> {{ record.predicted_stress }}</p>
+        <p><strong>GPA prédit :</strong> {{ record.predicted_gpa }}</p>
         <p><strong>Date :</strong> {{ record.created_at|date:"d/m/Y à H:i" }}</p>
         <a href="{% url 'student_form' %}" class="back">← Faire une nouvelle prédiction</a>
     </div>
     {% endif %}
 </div>
-
 </body>
 </html>

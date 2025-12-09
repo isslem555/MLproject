@@ -10,8 +10,4 @@ class StudentRecordForm(forms.ModelForm):
             'sleep_hours_per_day',
             'social_hours_per_day',
             'physical_activity_hours_per_day',
-            'stress_level',
         ]
-        widgets = {
-            'stress_level': forms.TextInput(attrs={'placeholder': 'ex: Low, Medium, High'}),
-        }

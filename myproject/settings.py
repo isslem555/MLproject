@@ -68,14 +68,19 @@ WSGI_APPLICATION = 'myproject.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'student_app',
-        'USER': 'root',
-        'PASSWORD': '123456789',
+        'USER': 'emna',
+        'PASSWORD': 'emna_1234',
         'HOST': '127.0.0.1',
-        'PORT': '3307',
+        'PORT': '3306',
+        'OPTIONS': {
+            'charset': 'utf8mb4',
+            'auth_plugin': 'mysql_native_password',
+        },
     }
 }
 
