@@ -111,6 +111,15 @@
             color: #2d3436;
         }
 
+        .error {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #ffe3e3;
+            color: #d63031;
+            border-radius: 12px;
+            font-weight: 500;
+        }
+
         a.back {
             display: inline-block;
             margin-top: 15px;
@@ -135,14 +144,20 @@
         <button type="submit">🚀 Prédire</button>
     </form>
 
+    {% if error %}
+        <div class="error">
+            ⚠️ {{ error }}
+        </div>
+    {% endif %}
+
     {% if record %}
-    <div class="result">
-        <h2>🎉 Résultat de la prédiction</h2>
-        <p><strong>Stress prédit :</strong> {{ record.predicted_stress }}</p>
-        <p><strong>GPA prédit :</strong> {{ record.predicted_gpa }}</p>
-        <p><strong>Date :</strong> {{ record.created_at|date:"d/m/Y à H:i" }}</p>
-        <a href="{% url 'student_form' %}" class="back">← Faire une nouvelle prédiction</a>
-    </div>
+        <div class="result">
+            <h2>🎉 Résultat de la prédiction</h2>
+            <p><strong>Stress prédit :</strong> {{ record.stress_level|default:"Non disponible" }}</p>
+            <p><strong>GPA prédit :</strong> {{ record.predicted_gpa|default:"Non disponible" }}</p>
+            <p><strong>Date :</strong> {{ record.created_at|date:"d/m/Y à H:i"|default:"Non disponible" }}</p>
+            <a href="{% url 'student_form' %}" class="back">← Faire une nouvelle prédiction</a>
+        </div>
     {% endif %}
 </div>
 </body>
