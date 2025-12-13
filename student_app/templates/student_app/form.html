@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
     <meta charset="utf-8">
-    <title>Prédiction Stress & GPA</title>
+    <title>Prédiction Stress</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
@@ -135,8 +135,8 @@
 </head>
 <body>
 <div class="container">
-    <h1>🌟 Prédiction Stress & GPA</h1>
-    <p class="subtitle">Estimez le stress et la performance académique de l'étudiant</p>
+    <h1>🌟 Prédiction Stress</h1>
+    <p class="subtitle">Estimez le niveau de stress de l'étudiant</p>
 
     <form method="post" action="{% url 'student_form' %}">
         {% csrf_token %}
@@ -154,7 +154,6 @@
         <div class="result">
             <h2>🎉 Résultat de la prédiction</h2>
             <p><strong>Stress prédit :</strong> {{ record.stress_level|default:"Non disponible" }}</p>
-            <p><strong>GPA prédit :</strong> {{ record.predicted_gpa|default:"Non disponible" }}</p>
             <p><strong>Date :</strong> {{ record.created_at|date:"d/m/Y à H:i"|default:"Non disponible" }}</p>
             <a href="{% url 'student_form' %}" class="back">← Faire une nouvelle prédiction</a>
         </div>
