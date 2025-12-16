@@ -1,163 +1,582 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="utf-8">
-    <title>Prédiction Stress</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StressPredict - Prédiction de Stress Étudiant</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
         body {
-            font-family: 'Poppins', sans-serif;
-            background: linear-gradient(135deg, #e0eafc 0%, #cfdef3 100%);
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
-            margin: 0;
             display: flex;
             align-items: center;
             justify-content: center;
             padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Animation de fond */
+        body::before {
+            content: '';
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            top: -250px;
+            right: -250px;
+            animation: float 20s infinite ease-in-out;
+        }
+
+        body::after {
+            content: '';
+            position: absolute;
+            width: 400px;
+            height: 400px;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 50%;
+            bottom: -200px;
+            left: -200px;
+            animation: float 15s infinite ease-in-out reverse;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            50% { transform: translate(50px, 50px) rotate(180deg); }
         }
 
         .container {
-            background: white;
-            max-width: 580px;
-            width: 100%;
-            padding: 40px 35px;
-            border-radius: 20px;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08);
+            background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.3);
+            max-width: 650px;
+            width: 100%;
+            padding: 50px 45px;
+            border-radius: 30px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
+            position: relative;
+            z-index: 1;
+            animation: slideUp 0.6s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .logo {
+            font-size: 60px;
+            margin-bottom: 15px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
         }
 
         h1 {
-            text-align: center;
-            color: #5e60ce;
+            color: #667eea;
+            font-size: 32px;
+            font-weight: 700;
             margin-bottom: 10px;
-            font-weight: 600;
-            font-size: 28px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
         .subtitle {
-            text-align: center;
-            color: #8d99ae;
-            margin-bottom: 30px;
+            color: #718096;
             font-size: 16px;
+            font-weight: 400;
         }
 
         form {
             display: flex;
             flex-direction: column;
-            gap: 18px;
+            gap: 20px;
         }
 
-        label {
-            font-weight: 500;
+        form p {
+            display: flex;
+            flex-direction: column;
+            margin: 0;
+        }
+
+        form label {
             color: #4a5568;
-            margin-bottom: 6px;
-            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 8px;
         }
 
-        input {
-            padding: 14px 16px;
-            font-size: 16px;
+        input, select {
+            padding: 14px 18px;
+            font-size: 15px;
             border: 2px solid #e2e8f0;
             border-radius: 12px;
-            background-color: #fafafa;
+            font-family: 'Inter', sans-serif;
             transition: all 0.3s ease;
+            background: white;
         }
 
-        input:focus {
+        input:focus, select:focus {
             outline: none;
-            border-color: #a29bfe;
-            background-color: #fff;
-            box-shadow: 0 0 0 4px rgba(162, 155, 254, 0.15);
+            border-color: #667eea;
+            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
         }
 
-        button {
-            margin-top: 15px;
-            padding: 14px;
-            font-size: 17px;
+        input:hover, select:hover {
+            border-color: #cbd5e0;
+        }
+
+        button[type="submit"] {
+            width: 100%;
+            padding: 16px;
+            font-size: 18px;
             font-weight: 600;
             color: white;
-            background: linear-gradient(135deg, #6c5ce7 0%, #a29bfe 100%);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             border: none;
-            border-radius: 12px;
+            border-radius: 14px;
             cursor: pointer;
             transition: all 0.3s ease;
-            box-shadow: 0 8px 15px rgba(108, 92, 231, 0.3);
+            margin-top: 10px;
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
         }
 
-        button:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 12px 25px rgba(108, 92, 231, 0.4);
+        button[type="submit"]:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 35px rgba(102, 126, 234, 0.4);
         }
 
-        .result {
-            margin-top: 30px;
-            padding: 20px;
-            background: linear-gradient(135deg, #d5fefd 0%, #c3fce3 100%);
-            border-radius: 16px;
-            border-left: 5px solid #00d2d3;
-        }
-
-        .result h2 {
-            margin-top: 0;
-            color: #2d3436;
-        }
-
-        .result p {
-            margin: 10px 0;
-            font-size: 17px;
-            color: #2d3436;
+        button[type="submit"]:active {
+            transform: translateY(0);
         }
 
         .error {
-            margin-top: 20px;
-            padding: 15px;
-            background-color: #ffe3e3;
-            color: #d63031;
+            margin-top: 25px;
+            padding: 20px;
+            background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);
+            color: #c53030;
+            border-radius: 16px;
+            border-left: 5px solid #e53e3e;
+            animation: slideUp 0.5s ease-out;
+        }
+
+        .result {
+            margin-top: 35px;
+            padding: 30px;
+            background: linear-gradient(135deg, #f6f8fb 0%, #e9ecef 100%);
+            border-radius: 20px;
+            border: 2px solid #e2e8f0;
+            animation: slideUp 0.5s ease-out;
+        }
+
+        .result h2 {
+            color: #2d3748;
+            font-size: 20px;
+            margin-bottom: 15px;
+        }
+
+        .result p {
+            color: #4a5568;
+            line-height: 1.7;
+            margin-bottom: 10px;
+        }
+
+        .result strong {
+            color: #2d3748;
+            font-weight: 600;
+        }
+
+        .stress-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 24px;
+            border-radius: 25px;
+            font-size: 18px;
+            font-weight: 600;
+            margin: 15px 0;
+            animation: bounceIn 0.6s ease-out;
+        }
+
+        @keyframes bounceIn {
+            0% { transform: scale(0); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        .stress-low {
+            background: linear-gradient(135deg, #d4fc79 0%, #96e6a1 100%);
+            color: #276749;
+        }
+
+        .stress-medium {
+            background: linear-gradient(135deg, #ffeaa7 0%, #fdcb6e 100%);
+            color: #975a16;
+        }
+
+        .stress-high {
+            background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);
+            color: #c53030;
+        }
+
+        .advice-box {
+            margin-top: 25px;
+            padding: 25px;
+            background: white;
+            border-radius: 16px;
+            border-left: 5px solid #667eea;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .advice-box h3 {
+            color: #667eea;
+            font-size: 18px;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .advice-box p {
+            color: #4a5568;
+            line-height: 1.7;
+            margin-bottom: 15px;
+        }
+
+        .btn-speak {
+            padding: 10px 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-speak:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        /* Chatbot */
+        #chatbot-button {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 65px;
+            height: 65px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            cursor: pointer;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+            transition: all 0.3s ease;
+            z-index: 1000;
+            animation: bounce 2s infinite;
+            border: none;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        #chatbot-button:hover {
+            transform: scale(1.1) translateY(0);
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.5);
+        }
+
+        #chatbot-box {
+            position: fixed;
+            bottom: 110px;
+            right: 30px;
+            width: 380px;
+            max-width: calc(100vw - 60px);
+            background: white;
+            border-radius: 20px;
+            display: none;
+            flex-direction: column;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+            z-index: 999;
+            overflow: hidden;
+            animation: slideUp 0.4s ease-out;
+        }
+
+        #chatbot-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 18px 20px;
+            font-weight: 600;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        #chatbot-messages {
+            padding: 20px;
+            height: 350px;
+            overflow-y: auto;
+            background: #f7fafc;
+        }
+
+        #chatbot-messages > div {
+            margin-bottom: 15px;
+            padding: 12px 16px;
             border-radius: 12px;
-            font-weight: 500;
+            max-width: 80%;
+            animation: messageSlide 0.3s ease-out;
         }
 
-        a.back {
-            display: inline-block;
-            margin-top: 15px;
-            color: #6c5ce7;
-            text-decoration: none;
-            font-weight: 500;
+        @keyframes messageSlide {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
-        a.back:hover {
-            text-decoration: underline;
+        #chatbot-input {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            background: white;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        #chatbot-input input {
+            flex: 1;
+            padding: 12px 15px;
+            border: 2px solid #e2e8f0;
+            border-radius: 25px;
+            font-size: 14px;
+            margin: 0 10px;
+        }
+
+        #chatbot-input input:focus {
+            border-color: #667eea;
+        }
+
+        #chatbot-input button {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            padding: 0;
+            margin: 0;
+        }
+
+        #chatbot-input button:first-child {
+            background: linear-gradient(135deg, #00d2ff 0%, #3a7bd5 100%);
+            color: white;
+        }
+
+        #chatbot-input button:last-child {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        #chatbot-input button:hover {
+            transform: scale(1.1);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 35px 25px;
+            }
+
+            h1 {
+                font-size: 26px;
+            }
+
+            #chatbot-box {
+                width: calc(100vw - 40px);
+                right: 20px;
+            }
         }
     </style>
 </head>
 <body>
-<div class="container">
-    <h1>🌟 Prédiction Stress</h1>
-    <p class="subtitle">Estimez le niveau de stress de l'étudiant</p>
+    <div class="container">
+        <div class="header">
+            <div class="logo">🧠</div>
+            <h1>StressPredict</h1>
+            <p class="subtitle">Analyse intelligente du niveau de stress étudiant</p>
+        </div>
 
-    <form method="post" action="{% url 'student_form' %}">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">🚀 Prédire</button>
-    </form>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">🚀 Analyser mon niveau de stress</button>
+        </form>
 
-    {% if error %}
+        {% if error %}
         <div class="error">
             ⚠️ {{ error }}
         </div>
-    {% endif %}
+        {% endif %}
 
-    {% if record %}
+        {% if record %}
         <div class="result">
-            <h2>🎉 Résultat de la prédiction</h2>
-            <p><strong>Stress prédit :</strong> {{ record.stress_level|default:"Non disponible" }}</p>
-            <p><strong>Date :</strong> {{ record.created_at|date:"d/m/Y à H:i"|default:"Non disponible" }}</p>
-            <a href="{% url 'student_form' %}" class="back">← Faire une nouvelle prédiction</a>
+            <h2>📊 Résultat de l'analyse</h2>
+            <p><strong>Niveau de stress :</strong>
+                <span class="stress-badge {% if record.stress_level == 'Low' %}stress-low{% elif record.stress_level == 'Medium' %}stress-medium{% else %}stress-high{% endif %}">
+                    {% if record.stress_level == 'Low' %}😊 Faible{% elif record.stress_level == 'Medium' %}😐 Modéré{% else %}😰 Élevé{% endif %}
+                </span>
+            </p>
+            <p><strong>Date :</strong> {{ record.created_at|date:"d/m/Y à H:i" }}</p>
         </div>
-    {% endif %}
-</div>
+        {% endif %}
+
+        {% if advice %}
+        <div class="advice-box">
+            <h3>💡 Conseils personnalisés</h3>
+            <p id="advice-text">{{ advice }}</p>
+            <button class="btn-speak" onclick="speakAdvice()">🔊 Écouter les conseils</button>
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- Chatbot -->
+    <button id="chatbot-button">💬</button>
+
+    <div id="chatbot-box">
+        <div id="chatbot-header">
+            <span>🤖</span>
+            <span>Assistant Bien-Être</span>
+        </div>
+        <div id="chatbot-messages">
+            <div style="background: white; color: #2d3748; border: 1px solid #e2e8f0;">
+                Bonjour ! Je suis votre assistant bien-être. Comment puis-je vous aider aujourd'hui ? 😊
+            </div>
+        </div>
+        <div id="chatbot-input">
+            <button onclick="startVoice()" title="Reconnaissance vocale">🎤</button>
+            <input type="text" id="chat-input" placeholder="Écrivez votre message...">
+            <button onclick="sendMessage()">➤</button>
+        </div>
+    </div>
+
+    <script>
+        /* ===== CHATBOT TOGGLE ===== */
+        const chatbotBtn = document.getElementById("chatbot-button");
+        const chatbotBox = document.getElementById("chatbot-box");
+
+        chatbotBtn.onclick = () => {
+            chatbotBox.style.display = chatbotBox.style.display === "flex" ? "none" : "flex";
+        };
+
+        /* ===== SEND MESSAGE ===== */
+        function sendMessage() {
+            const input = document.getElementById("chat-input");
+            const msg = input.value.trim();
+            if (!msg) return;
+
+            const messages = document.getElementById("chatbot-messages");
+
+            // Message utilisateur
+            const userDiv = document.createElement('div');
+            userDiv.style.cssText = 'background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; margin-left: auto; text-align: right;';
+            userDiv.textContent = msg;
+            messages.appendChild(userDiv);
+
+            input.value = "";
+
+            // Appel API Django
+            fetch("/student/chatbot/", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    message: msg,
+                    stress: "{{ record.stress_level|default:'Unknown' }}"
+                })
+            })
+            .then(res => res.json())
+            .then(data => {
+                const botDiv = document.createElement('div');
+                botDiv.style.cssText = 'background: white; color: #2d3748; border: 1px solid #e2e8f0;';
+                botDiv.textContent = data.reply;
+                messages.appendChild(botDiv);
+                messages.scrollTop = messages.scrollHeight;
+            })
+            .catch(err => {
+                console.error('Erreur chatbot:', err);
+            });
+
+            messages.scrollTop = messages.scrollHeight;
+        }
+
+        /* 🎤 SPEECH TO TEXT */
+        function startVoice() {
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+            if (!SpeechRecognition) {
+                alert("Désolé, votre navigateur ne supporte pas la reconnaissance vocale.");
+                return;
+            }
+
+            const recognition = new SpeechRecognition();
+            recognition.lang = "fr-FR";
+            recognition.start();
+
+            recognition.onresult = (event) => {
+                document.getElementById("chat-input").value = event.results[0][0].transcript;
+            };
+
+            recognition.onerror = () => {
+                alert("Erreur de reconnaissance vocale. Veuillez réessayer.");
+            };
+        }
+
+        /* 🔊 TEXT TO SPEECH */
+        function speakAdvice() {
+            const text = document.getElementById("advice-text").textContent;
+            const speech = new SpeechSynthesisUtterance(text);
+            speech.lang = "fr-FR";
+            speech.rate = 0.9;
+            speech.pitch = 1;
+            window.speechSynthesis.speak(speech);
+        }
+    </script>
 </body>
 </html>
